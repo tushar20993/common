@@ -65,4 +65,8 @@
 		<echo>JAR files built</echo>
 	</target>
 	
+	<target name="test">
+		<antcall target="build"/>
+	</target>
+	
 </project>
