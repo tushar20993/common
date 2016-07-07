@@ -10,7 +10,7 @@ import com.tushar.common.utils.MDate;
 public abstract class BaseJob {
 	
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(BaseJob.class);
-	private static final String INCORRECT_FORMAT_ERROR = "Please enter applicationFileName, jobName (and date yyyy-MM-dd, optionally)";
+	private static final String INCORRECT_FORMAT_ERROR = "Please enter applicationFileName,  jobName (and date yyyy-MM-dd, optionally)";
 	
 	public abstract void executeInternal(MDate businessDate);
 	
