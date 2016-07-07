@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<!-- Configuration of the Ant build system to generate a Jar file --> 
+<project xmlns:ivy="antlib:org.apache.ivy.ant" 
+	name="common" default="deploy.local" basedir=".">
+	
+	<property file="build.properties"/>
+	<property name="build.dir" value="build"/>
+	<property name="src.dir" value="main"/>
+	<property name="lib.dir" value="lib"/>
+	<property name="deploy.dir" value = "${deploy.dir.local}/${build.organisation}/${ant.project.name}/${build.revision}"/>
+
+	<target name="clean" description="Clean up">
+		<echo>Cleaning up...</echo>
+		<delete dir="${build.dir}"/>
+	</target>
+	
+	<target name="init" depends="clean">
+		<echo>Creating temporary folders...</echo>
+		<mkdir dir="${build.dir}"/>
+	</target>
+	
+	<path id="compileClasspath">
+			<fileset dir="${basedir}/">
+				<include name="${lib.dir}/*.jar" />
+				<exclude name="${lib.dir}/*sources.jar"/>
+				<exclude name="${lib.dir}/*javadoc.jar"/>
+			</fileset>
+		</path>
+
+	
+	<target name="build" depends="init" description="Compile and Build project">
+		<echo>Retrieving Ivy Dependencies</echo>
+		<ivy:retrieve />
+		<echo>Compiling the source codes</echo>
+		<javac 
+			debug="true" 
+			deprecation="true"
+			listfiles="true" 
+			includeantruntime="false" 
+			classpathref="compileClasspath"
+			srcdir="${src.dir}" 
+			destdir="${build.dir}" />
+	</target>
+	
+	<target name="deploy.local" depends="build" description="Deploy to local dist folder">
+		<echo>Deleting files from local webserver...</echo>
+		<delete failonerror="false">
+			<fileset dir="${deploy.dir}"/>
+		</delete>
+		<echo>Copying source files to local webserver...</echo>
+		<copy todir="${deploy.dir}/${build.output.folder}">
+			<fileset dir="${src.dir}"/>
+		</copy>
+		<antcall target="buildJar"/>
+		<antcall target="clean"/>
+	</target>
+	
+	<target name="buildJar">
+		<echo>Building jar from folder: ${build.dir}</echo>
+		<jar destfile="${deploy.dir}/${ant.project.name}.jar">
+			<fileset dir="${build.dir}"/>
+			<fileset dir="${src.dir}"/>
+		</jar>
+		<echo>JAR files built</echo>
+	</target>
+	
+</project>

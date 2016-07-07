@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+
+    <info organisation="com.tushar" module="common"/>
+    
+    <configurations>
+        <conf name="jars" description="Required to compile application"/>
+        <conf name="sources" description="Source code"/>
+        <conf name="javadoc" description="Javadocs"/>
+    </configurations>
+    
+    <publications>
+        <artifact name="common" type="jar" ext="jar" conf="jars,sources,javadoc"/>
+        <artifact name="common" type="jar" ext="jar" conf="jars"/>
+        <artifact name="common" type="jar" ext="jar" conf="sources"/>
+        <artifact name="common" type="jar" ext="jar" conf="javadoc"/>
+    </publications>
+    
+    <dependencies>
+		<dependency org="org.springframework" name="spring-core" rev="4.3.1.RELEASE"/>
+		<dependency org="org.springframework" name="spring-beans" rev="4.3.1.RELEASE"/>
+		<dependency org="org.springframework" name="spring-context" rev="4.3.1.RELEASE"/>
+		<dependency org="org.slf4j" name="slf4j-api" rev="1.7.21"/>
+		<dependency org="ch.qos.logback" name="logback-classic" rev="1.1.7"/>
+    </dependencies>
+    
+</ivy-module>
