@@ -1,9 +1,10 @@
 package com.tushar.common.excel;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
-import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -15,6 +16,7 @@ public class ExcelManager {
 	
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(ExcelManager.class);
 	
+	private String templateFileName;
 	private String dataDir;
 	private String filePrefix;
 	private String fileSuffix;
@@ -24,8 +26,19 @@ public class ExcelManager {
 	
 	public boolean init(){
 		try{
-			wb = new XSSFWorkbook(OPCPackage.open(getTemplateFile()));
-			fileName = getDataDir() + "/" + getFilePrefix() + "." + getFileSuffix();
+			if(getTemplateFileName() == null){
+				wb = new XSSFWorkbook();
+			}
+			else{
+				wb = new XSSFWorkbook(new FileInputStream(getTemplateFileName()));
+			}
+			fileName = 		getDataDir() + 
+							"/" + 
+							getFilePrefix() +
+							"_" + 
+							new Date().getTime() + 
+							"." + 
+							getFileSuffix();
 			return true;
 		}
 		catch(Exception e){
@@ -76,10 +89,6 @@ public class ExcelManager {
 		return fileName;
 	}
 
-	public String getTemplateFile() {
-		return getDataDir() + "/" + ExcelConstants.TEMPLATE_FILE;
-	}
-
 	public Sheet getSheet(int index){
 		return wb.getSheetAt(index); 
 	}
@@ -91,11 +100,19 @@ public class ExcelManager {
 	private int rowCount = 0;
 	public void addDetailsRow(Object[] values){
 		Sheet sheet = getSheet(0);
-		Row row = sheet.createRow(25 + rowCount);
+		Row row = sheet.getRow(25 + rowCount);
 		rowCount++;
-		row.createCell(0).setCellValue((double) values[0]);
-		row.createCell(1).setCellValue((String) values[1]);
-		row.createCell(2).setCellValue((double) values[2]);
+		row.getCell(0).setCellValue((double) values[0]);
+		row.getCell(1).setCellValue((String) values[1]);
+		row.getCell(2).setCellValue((double) values[2]);
+	}
+
+	public String getTemplateFileName() {
+		return getDataDir() + "/" + templateFileName;
+	}
+
+	public void setTemplateFileName(String templateFileName) {
+		this.templateFileName = templateFileName;
 	}
 
 }
