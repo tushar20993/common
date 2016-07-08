@@ -18,6 +18,7 @@
 	<target name="init" depends="clean">
 		<echo>Creating temporary folders...</echo>
 		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${lib.dir}"/>
 	</target>
 	
 	<path id="compileClasspath">
